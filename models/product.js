@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+// require("./category");
 const productSchema = mongoose.Schema({
   name: {
     type: String,
@@ -30,11 +31,12 @@ const productSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    required: true,
-  },
+  category:
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      required: true,
+    },
   countInStock: {
     type: Number,
     required: true,
@@ -59,4 +61,11 @@ const productSchema = mongoose.Schema({
   },
 });
 
+productSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+})
+
+productSchema.set('toJSON', {
+    virtuals: true,
+})
 exports.Product = mongoose.model("product", productSchema);
