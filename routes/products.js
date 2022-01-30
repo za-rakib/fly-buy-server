@@ -30,6 +30,7 @@ router.get(`/`, async (req, res) => {
     }
     res.send(productList);
   });
+  
 // get some item
 router.get(`/`, async (req, res) => {
   const productList = await Product.find().select("name price -_id");

@@ -5,6 +5,8 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const authJtw = require("./helpers/jwt");
+const errorHandler = require("./helpers/error-handler");
 const port = 5000;
 
 app.use(cors());
@@ -13,6 +15,8 @@ app.options("*", cors());
 //middleware
 app.use(bodyParser.json());
 app.use(morgan("tiny"));
+app.use(authJtw());
+app.use(errorHandler);
 
 //routers
 const categoriesRouter = require("./routes/categories");
