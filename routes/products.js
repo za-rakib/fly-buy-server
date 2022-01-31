@@ -172,7 +172,7 @@ router.get(`/get/count`, async (req, res) => {
 });
 
 // get feature product
-router.get(`/get/feature/:count`, async (req, res) => {
+router.get(`/get/featured/:count`, async (req, res) => {
   const count = req.params.count ? req.params.count : 0;
   const productCount = await Product.find({ isFeatured: true }).limit(+count);
   if (!productCount) {
