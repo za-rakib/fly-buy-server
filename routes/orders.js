@@ -134,7 +134,17 @@ router.get(`/get/totalSales`, async (req, res) => {
     return res
       .status(404)
       .json({ success: false, message: "The order sales can not be granted" });
-  res.status(200).send({ totalSales: totalSales });
+  res.status(200).send({ totalSales: totalSales.pop().totalSales });
 });
 
+// get total Order number
+router.get(`/get/count`, async (req, res) => {
+    const orderCount = await Order.countDocuments({});
+    if (!orderCount) {
+      res.status(500).json({ success: false });
+    }
+    res.send({
+        orderCount: orderCount,
+    });
+  });
 module.exports = router;
