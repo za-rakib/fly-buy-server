@@ -76,7 +76,6 @@ router.post(`/`, uploadOptions.single("image"), async (req, res) => {
   const fileName = req.file.filename;
   //http://localhost:5000/public/uploads/imageNme.jpg
   const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
-
   let product = new Product({
     name: req.body.name,
     description: req.body.description,
@@ -210,4 +209,33 @@ router.get(`/get/featured/:count`, async (req, res) => {
   });
 });
 
+router.put(
+  `/gallery-image/:id`,
+  uploadOptions.array("images", 10),
+  async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      res.status(404).send("Invalid product id");
+    }
+    let imagePaths = [];
+    const files = req.files;
+    const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
+    if (files) {
+      files.map((file) => {
+        imagePaths.push(`${basePath}${file.filename}`);
+      });
+    }
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        images: imagePaths,
+      },
+      { new: true }
+    );
+    if (!product) {
+      return res.status(400).send("The category cannot be updated");
+    }
+    res.status(200).send(product);
+  }
+);
+ 
 module.exports = router;
